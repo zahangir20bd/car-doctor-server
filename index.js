@@ -42,9 +42,36 @@ async function run() {
     });
 
     // Bookings
+    app.get("/bookings", async (req, res) => {
+      console.log(req.query);
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query?.email };
+      }
+      const result = await bookingCollection.find(query).toArray();
+      res.send(result);
+    });
 
     app.post("/bookings", async (req, res) => {
       const bookings = req.body;
+      console.log(bookings);
+      const result = await bookingCollection.insertOne(bookings);
+      res.send(result);
+    });
+
+    // Delete Bookings
+
+    app.delete("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await bookingCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // Updated Booking
+    app.put("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedBooking = req.body;
     });
 
     // Send a ping to confirm a successful connection
