@@ -69,9 +69,18 @@ async function run() {
     });
 
     // Updated Booking
-    app.put("/bookings/:id", async (req, res) => {
+    app.patch("/bookings/:id", async (req, res) => {
       const id = req.params.id;
       const updatedBooking = req.body;
+      console.log(updatedBooking);
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          status: updatedBooking.status,
+        },
+      };
+      const result = await bookingCollection.updateOne(filter, updatedDoc);
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
